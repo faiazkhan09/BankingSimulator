@@ -1,5 +1,3 @@
-import 'package:banking_simulator/banking_simulator.dart' as banking_simulator;
-
-void main(List<String> arguments) {
-  print('Hello world: ${banking_simulator.calculate()}!');
+void main(){
+  print("Welcome to Faiaz bank's banking app");
 }
