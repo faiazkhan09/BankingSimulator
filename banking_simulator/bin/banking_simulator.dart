@@ -2,11 +2,14 @@ import 'dart:io';
 import 'package:banking_simulator/banking_simulator.dart';
 
 double balance = 100.0;
+final List<String> _transaction = [];
 void main() {
   bool input = false;
 
   while (input == false) {
-    print('\n1. Deposit \n2. Withdraw \n3. Check Balance \n0. Exit Program \n');
+    print(
+      '\n1. Deposit \n2. Withdraw \n3. Check Balance \n4. View Transaction History \n0. Exit Program \n',
+    );
     stdout.write('Enter the number of your choise:');
     String? choise = stdin.readLineSync();
 
@@ -15,6 +18,8 @@ void main() {
       while (depositContinue == true) {
         double? deposit = getValidAmount('Enter amount to deposit: ');
         balance += deposit;
+        print('$deposit deposited into account. Current balance is: $balance');
+        _transaction.add('Deposited: $deposit');
 
         depositContinue = continueTransaction();
       }
@@ -27,6 +32,7 @@ void main() {
           withdrawContinue = true;
         } else {
           balance -= withdraw;
+          _transaction.add('Withdrawn: $withdraw');
           print(
             '$withdraw taka withdrawn from account. Balance remaining: $balance',
           );
@@ -37,6 +43,10 @@ void main() {
       print('\nChecking Balance...');
       print('\nBalance available: $balance');
       input = false;
+    } else if (choise == '4') {
+      for (var t in _transaction) {
+        print(t);
+      }
     } else if (choise == '0') {
       print('\nExiting Program');
       input = true;
