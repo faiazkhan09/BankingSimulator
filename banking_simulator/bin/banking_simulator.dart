@@ -56,8 +56,51 @@ void main() {
         }
       }
     } else if (choise == '2') {
-      print('checking Withdrawal');
-      input = true;
+      bool withdrawConti = true;
+      while (withdrawConti == true) {
+        stdout.write('Enter amount to withdraw: ');
+        String? amountW = stdin.readLineSync();
+
+        if (amountW != null) {
+          double? amountWW = double.tryParse(amountW);
+
+          if (amountWW == null || amountWW < 0) {
+            print('Invalid input. Please enter a positive amount');
+            withdrawConti = true;
+          } else if (amountWW > 0) {
+            balance -= amountWW;
+            print(
+              '$amountWW amount withdrawn from account. Remaining balance: $balance',
+            );
+
+            bool withdrawTransacConti = true;
+            while (withdrawTransacConti == true) {
+              stdout.write(
+                '\nContinue Trancaction?(Y/n)',
+              ); // enter to continue, type n to go back to home and anything else gives the massage invalid input and asks again
+              String? conChoise = stdin.readLineSync();
+
+              if (conChoise != null && conChoise == 'n') {
+                withdrawTransacConti = false;
+                withdrawConti = false;
+              } else if (conChoise == '' ||
+                  conChoise == 'Y' ||
+                  conChoise == 'y') {
+                withdrawConti = true;
+                withdrawTransacConti = false;
+              } else {
+                print('Invalid input, please provide correct input!');
+                withdrawTransacConti = true;
+              }
+            }
+          } else if (amountWW > balance) {
+            print('Insufficient balance, account balance is: $balance');
+          }
+        } else {
+          print('Invalid input');
+          withdrawConti = true;
+        }
+      }
     } else if (choise == '3') {
       print('\nChecking Balance...');
       print('Balance available: $balance');
