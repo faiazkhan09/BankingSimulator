@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:banking_simulator/banking_simulator.dart';
 
-double balance = 0;
+double balance = 100.0;
 void main() {
   bool input = false;
 
@@ -10,106 +11,37 @@ void main() {
     String? choise = stdin.readLineSync();
 
     if (choise == '1') {
-      bool depositConti = true;
-      while (depositConti == true) {
-        stdout.write('\nEnter the amount to deposit:');
-        String? amountD = stdin.readLineSync();
+      bool depositContinue = true;
+      while (depositContinue == true) {
+        double? deposit = getValidAmount('Enter amount to deposit: ');
+        balance += deposit;
 
-        if (amountD != null) {
-          double? amountDT = double.tryParse(
-            amountD,
-          ); //instead of using .Parse which would try to parse actual string into double, we can use tryParse,which would return null if it can't successfully parse.
-          if (amountDT == null) {
-            print('Invalid input! Please enter a numner');
-            depositConti = true;
-          } else if (amountDT > 0) {
-            balance += amountDT;
-            print('\nAmount Deposited');
-
-            bool depositTransacConti = true;
-            while (depositTransacConti == true) {
-              stdout.write(
-                '\nContinue Trancaction?(Y/n)',
-              ); // enter to continue, type n to go back to home and anything else gives the massage invalid input and asks again
-              String? conChoise = stdin.readLineSync();
-
-              if (conChoise != null && conChoise == 'n') {
-                depositTransacConti = false;
-                depositConti = false;
-              } else if (conChoise == '' ||
-                  conChoise == 'Y' ||
-                  conChoise == 'y') {
-                depositConti = true;
-                depositTransacConti = false;
-              } else {
-                print('Invalid input, please provide correct input!');
-                depositTransacConti = true;
-              }
-            }
-          } else if (amountDT < 0) {
-            print('Enter amount greater than 0');
-            depositConti = true;
-          }
-        } else {
-          print('No iput provided!');
-          depositConti = true;
-        }
+        depositContinue = continueTransaction();
       }
     } else if (choise == '2') {
-      bool withdrawConti = true;
-      while (withdrawConti == true) {
-        stdout.write('Enter amount to withdraw: ');
-        String? amountW = stdin.readLineSync();
-
-        if (amountW != null) {
-          double? amountWW = double.tryParse(amountW);
-
-          if (amountWW == null || amountWW < 0) {
-            print('Invalid input. Please enter a positive amount');
-            withdrawConti = true;
-          } else if (amountWW > 0) {
-            balance -= amountWW;
-            print(
-              '$amountWW amount withdrawn from account. Remaining balance: $balance',
-            );
-
-            bool withdrawTransacConti = true;
-            while (withdrawTransacConti == true) {
-              stdout.write(
-                '\nContinue Trancaction?(Y/n)',
-              ); // enter to continue, type n to go back to home and anything else gives the massage invalid input and asks again
-              String? conChoise = stdin.readLineSync();
-
-              if (conChoise != null && conChoise == 'n') {
-                withdrawTransacConti = false;
-                withdrawConti = false;
-              } else if (conChoise == '' ||
-                  conChoise == 'Y' ||
-                  conChoise == 'y') {
-                withdrawConti = true;
-                withdrawTransacConti = false;
-              } else {
-                print('Invalid input, please provide correct input!');
-                withdrawTransacConti = true;
-              }
-            }
-          } else if (amountWW > balance) {
-            print('Insufficient balance, account balance is: $balance');
-          }
+      bool withdrawContinue = true;
+      while (withdrawContinue == true) {
+        double? withdraw = getValidAmount('Enter amount to withdraw: ');
+        if (withdraw > balance) {
+          print('Insufficient balance. Current account balance: $balance');
+          withdrawContinue = true;
         } else {
-          print('Invalid input');
-          withdrawConti = true;
+          balance -= withdraw;
+          print(
+            '$withdraw taka withdrawn from account. Balance remaining: $balance',
+          );
+          withdrawContinue = continueTransaction();
         }
       }
     } else if (choise == '3') {
       print('\nChecking Balance...');
-      print('Balance available: $balance');
+      print('\nBalance available: $balance');
       input = false;
     } else if (choise == '0') {
-      print('Exiting Program');
+      print('\nExiting Program');
       input = true;
     } else {
-      print('Whatever');
+      print('\nPlease select which servise you want-');
       input = false;
     }
   }
