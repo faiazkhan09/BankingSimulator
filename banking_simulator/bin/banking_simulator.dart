@@ -3,17 +3,25 @@ import 'package:banking_simulator/banking_simulator.dart';
 
 double balance = 100.0;
 final List<String> _transaction = [];
-void main() {
+void main() async {
   bool input = false;
 
   while (input == false) {
     print(
-      '\n1. Deposit \n2. Withdraw \n3. Check Balance \n4. View Transaction History \n0. Exit Program \n',
+      '\n1. Create account \n2. Deposit \n3. Withdraw \n4. Check Balance \n5. View Transaction History \n0. Exit Program \n',
     );
     stdout.write('Enter the number of your choise:');
     String? choise = stdin.readLineSync();
 
     if (choise == '1') {
+      final file = File(r'..\lib\raccount_details.txt');
+
+      // try{
+      //   await file.wri;
+      // }
+    }
+
+    if (choise == '2') {
       bool depositContinue = true;
       while (depositContinue == true) {
         double? deposit = getValidAmount('Enter amount to deposit: ');
@@ -23,7 +31,7 @@ void main() {
 
         depositContinue = continueTransaction();
       }
-    } else if (choise == '2') {
+    } else if (choise == '3') {
       bool withdrawContinue = true;
       while (withdrawContinue == true) {
         double? withdraw = getValidAmount('Enter amount to withdraw: ');
@@ -39,11 +47,11 @@ void main() {
           withdrawContinue = continueTransaction();
         }
       }
-    } else if (choise == '3') {
+    } else if (choise == '4') {
       print('\nChecking Balance...');
       print('\nBalance available: $balance');
       input = false;
-    } else if (choise == '4') {
+    } else if (choise == '5') {
       for (var t in _transaction) {
         print(t);
       }

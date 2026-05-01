@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:banking_simulator/account_class_file.dart';
 
 double getValidAmount(String message) {
   while (true) {
@@ -30,4 +31,13 @@ bool continueTransaction() {
     }
     return continueTranc;
   }
+}
+
+Persons createAccount() {
+  stdout.write('Enter user name: ');
+  String uName = stdin.readLineSync() ?? '';
+  stdout.write('Enter account number: ');
+  String aNumber = stdin.readLineSync() ?? '';
+  double balance = 0;
+  return Persons(uName, aNumber, balance);
 }
