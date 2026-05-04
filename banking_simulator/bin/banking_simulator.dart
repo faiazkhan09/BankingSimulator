@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:banking_simulator/account_class_file.dart';
 import 'package:banking_simulator/banking_simulator.dart';
 
 double balance = 100.0;
@@ -14,11 +15,15 @@ void main() async {
     String? choise = stdin.readLineSync();
 
     if (choise == '1') {
-      final file = File(r'..\lib\raccount_details.txt');
+      try {
+        final account = createAccount();
+        final storage = AccountStorage();
 
-      // try{
-      //   await file.wri;
-      // }
+        await storage.save(account);
+        print('\nAccount created');
+      } catch (e) {
+        print('Could not create your account! Please try again');
+      }
     }
 
     if (choise == '2') {
