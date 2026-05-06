@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:banking_simulator/account_class_file.dart';
 
 double getValidAmount(String message) {
@@ -40,4 +41,36 @@ Persons createAccount() {
   String aNumber = stdin.readLineSync() ?? '';
   double balance = 0;
   return Persons(uName, aNumber, balance);
+}
+
+Future<List> readAccountInfo() async {
+  final accountInfo = File('banking_simulator/data/accounts.txt');
+  try {
+    if (await accountInfo.exists()) {
+      String accountDetails = await accountInfo.readAsString();
+      List<String> lines = accountDetails.split('\n');
+      List<Map<String, dynamic>> userDetails = [];
+      for (var line in lines) {
+        if (line.trim().isEmpty) continue;
+        var map = jsonDecode(line);
+        userDetails.add(map);
+      }
+      return userDetails;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print('NO file');
+    return [];
+  }
+}
+
+Future<void> compareAccount(String? accnum) async {
+  var accountDetails = await readAccountInfo();
+  for (var lines in accountDetails) {
+    if (lines['accountnumber'] == accnum) {
+      print('Account found $lines');
+      break;
+    }
+  }
 }

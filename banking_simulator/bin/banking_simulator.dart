@@ -9,7 +9,7 @@ void main() async {
 
   while (input == false) {
     print(
-      '\n1. Create account \n2. Deposit \n3. Withdraw \n4. Check Balance \n5. View Transaction History \n0. Exit Program \n',
+      '\n1. Create account \n2. View Accounts \n3. Deposit \n4. Withdraw \n5. Check Balance \n6. View Transaction History \n0. Exit Program \n',
     );
     stdout.write('Enter the number of your choise:');
     String? choise = stdin.readLineSync();
@@ -24,9 +24,11 @@ void main() async {
       } catch (e) {
         print('Could not create your account! Please try again');
       }
-    }
-
-    if (choise == '2') {
+    } else if (choise == '2') {
+      stdout.write('Enter account number:');
+      String? accnum = stdin.readLineSync();
+      await compareAccount(accnum);
+    } else if (choise == '3') {
       bool depositContinue = true;
       while (depositContinue == true) {
         double? deposit = getValidAmount('Enter amount to deposit: ');
@@ -36,7 +38,7 @@ void main() async {
 
         depositContinue = continueTransaction();
       }
-    } else if (choise == '3') {
+    } else if (choise == '4') {
       bool withdrawContinue = true;
       while (withdrawContinue == true) {
         double? withdraw = getValidAmount('Enter amount to withdraw: ');
@@ -52,11 +54,11 @@ void main() async {
           withdrawContinue = continueTransaction();
         }
       }
-    } else if (choise == '4') {
+    } else if (choise == '5') {
       print('\nChecking Balance...');
       print('\nBalance available: $balance');
       input = false;
-    } else if (choise == '5') {
+    } else if (choise == '6') {
       for (var t in _transaction) {
         print(t);
       }
