@@ -18,6 +18,7 @@ class Persons extends PersonRequirements {
   Persons(this.name, this.accountnumber, this.balance);
 
   Map<String, dynamic> toJson() => {
+    //this is a function called toJson() whcih converts class objects to Map data type
     'name': name,
     'accountnumber': accountnumber,
     'balance': balance,
@@ -29,8 +30,15 @@ class AccountStorage {
 
   Future<void> save(Persons person) async {
     await file.writeAsString(
-      '${jsonEncode(person.toJson())}\n',
+      '${jsonEncode(person.toJson())}\n', //jsonEncoder is recieving a map data type which is being stored in the txt file.
       mode: FileMode.append,
     );
+  }
+}
+
+class AccountUpdate {
+  final File file = File('banking_simulator/data/accounts.txt');
+  Future<void> update(List<Map<String, dynamic>> update) async {
+    await file.writeAsString(jsonEncode(update));
   }
 }

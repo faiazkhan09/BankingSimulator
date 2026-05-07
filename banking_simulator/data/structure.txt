@@ -1,0 +1,65 @@
+TXT file
+   ↓
+String
+   ↓
+List<String> (lines)
+   ↓
+List<Map> (decoded)
+   ↓
+Modify data
+   ↓
+List<Map>
+   ↓
+String (encoded)
+   ↓
+Write back to file
+
+Read file
+→ split lines
+→ decode JSON
+→ list of maps
+→ find account
+→ modify
+→ encode JSON
+→ join lines
+→ overwrite file
+
+Update:
+-data is saved in the text file as multiple Json String 
+{"name":"Faiaz","balance":100}
+{"name":"Khan","balance":200}
+
+-when reading the data, it is converted to List<Map<String, dynamic>> 
+[{"name":"Faiaz","balance":100}, {"name":"Khan","balance":200}]
+
+what to do next:
+-make changes so that user data is saved as List<Map<String, dynamic>> in the first place
+-if the immediate above is done, then make changes as to how data is read from the txt file-
+
+Future<List<Map<String, dynamic>>> readAccountInfo() async {
+  final accountInfo = File('banking_simulator/data/accounts.txt');
+
+  try {
+    // Check if file exists
+    if (await accountInfo.exists()) {
+      // Read entire file as String
+      String accountDetails = await accountInfo.readAsString();
+
+      // If file is empty, return empty list
+      if (accountDetails.trim().isEmpty) {
+        return [];
+      }
+
+      // Decode the JSON list
+      List<dynamic> decodedData = jsonDecode(accountDetails);
+
+      // Convert dynamic list into List<Map<String, dynamic>>
+      return decodedData.cast<Map<String, dynamic>>();
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print('No file found or invalid JSON.');
+    return [];
+  }
+} 
