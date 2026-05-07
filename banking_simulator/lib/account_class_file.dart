@@ -29,10 +29,19 @@ class AccountStorage {
   final File file = File('banking_simulator/data/accounts.txt');
 
   Future<void> save(Persons person) async {
-    await file.writeAsString(
-      '${jsonEncode(person.toJson())}\n', //jsonEncoder is recieving a map data type which is being stored in the txt file.
-      mode: FileMode.append,
-    );
+    List<Map<String, dynamic>> account = [];
+
+    if (await file.exists()) {
+      String content = await file.readAsString();
+
+      if (content.trim().isNotEmpty) {
+        List<dynamic> decodedData = jsonDecode(content);
+
+        account = decodedData.cast<Map<String, dynamic>>();
+      }
+    }
+    account.add(person.toJson());
+    await file.writeAsString(jsonEncode(account));
   }
 }
 

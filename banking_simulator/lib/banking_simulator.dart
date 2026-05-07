@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:convert';
 import 'package:banking_simulator/account_class_file.dart';
@@ -44,6 +43,7 @@ Persons createAccount() {
   return Persons(uName, aNumber, balance);
 }
 
+//Reads text file and returns a List containing Maps of user profiles
 Future<List> readAccountInfo() async {
   final accountInfo = File('banking_simulator/data/accounts.txt');
   try {
