@@ -48,28 +48,31 @@ Future<List> readAccountInfo() async {
   final accountInfo = File('banking_simulator/data/accounts.txt');
   try {
     if (await accountInfo.exists()) {
-      String accountDetails = await accountInfo
-          .readAsString(); //Json data is saved as String
-      List<String> lines = accountDetails.split('\n'); //
-      List<Map<String, dynamic>> userDetails = [];
-      for (var line in lines) {
-        if (line.trim().isEmpty) continue;
-        var map = jsonDecode(line);
-        userDetails.add(map);
+      String content = await accountInfo.readAsString();
+
+      if (content.trim().isEmpty) {
+        return [];
       }
-      return userDetails;
-    } else {
-      return [];
+      List<Map<String, dynamic>> account = [];
+      List<dynamic> decodedData = jsonDecode(content);
+
+      account = decodedData.cast<Map<String, dynamic>>();
+
+      return account;
     }
   } catch (e) {
     print('NO file');
     return [];
   }
+  return [];
 }
 
 Future<void> compareAccount(String? accnum) async {
+  final accountUpdate = AccountUpdate();
   var accountDetails = await readAccountInfo();
-  for (var account in accountDetails) {
+  List<Map<String, dynamic>> accountDetailsList = [];
+  accountDetailsList = accountDetails.cast<Map<String, dynamic>>();
+  for (var account in accountDetailsList) {
     if (account['accountnumber'] == accnum) {
       print('Account found $account');
       print('\n1. Deposti \n2. Withdraw');
@@ -79,10 +82,12 @@ Future<void> compareAccount(String? accnum) async {
         double? deposit = getValidAmount('\nEnter amount to deposit: ');
         account['balance'] += deposit;
         print('$account');
+        await accountUpdate.update(accountDetailsList);
       } else if (choise == '2') {
         double? withdraw = getValidAmount('Enter amount to withdraw: ');
         account['balance'] -= withdraw;
         print('$account');
+        await accountUpdate.update(accountDetailsList);
       }
     }
   }
