@@ -44,7 +44,7 @@ Persons createAccount() {
 }
 
 //Reads text file and returns a List containing Maps of user profiles
-Future<List> readAccountInfo() async {
+Future<List<Map<String, dynamic>>> readAccountInfo() async {
   final accountInfo = File('banking_simulator/data/accounts.txt');
   try {
     if (await accountInfo.exists()) {
@@ -70,9 +70,7 @@ Future<List> readAccountInfo() async {
 Future<void> compareAccount(String? accnum) async {
   final accountUpdate = AccountUpdate();
   var accountDetails = await readAccountInfo();
-  List<Map<String, dynamic>> accountDetailsList = [];
-  accountDetailsList = accountDetails.cast<Map<String, dynamic>>();
-  for (var account in accountDetailsList) {
+  for (var account in accountDetails) {
     if (account['accountnumber'] == accnum) {
       print('Account found $account');
       print('\n1. Deposti \n2. Withdraw');
@@ -82,12 +80,12 @@ Future<void> compareAccount(String? accnum) async {
         double? deposit = getValidAmount('\nEnter amount to deposit: ');
         account['balance'] += deposit;
         print('$account');
-        await accountUpdate.update(accountDetailsList);
+        await accountUpdate.update(accountDetails);
       } else if (choise == '2') {
         double? withdraw = getValidAmount('Enter amount to withdraw: ');
         account['balance'] -= withdraw;
         print('$account');
-        await accountUpdate.update(accountDetailsList);
+        await accountUpdate.update(accountDetails);
       }
     }
   }
