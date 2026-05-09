@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 import 'package:banking_simulator/account_class_file.dart';
 
 double getValidAmount(String message) {
@@ -35,10 +36,12 @@ bool continueTransaction() {
 }
 
 Persons createAccount() {
+  int min = 100000;
+  int randomint = min + Random().nextInt(899999);
+  String randomString = randomint.toString();
   stdout.write('Enter user name: ');
   String uName = stdin.readLineSync() ?? '';
-  stdout.write('Enter account number: ');
-  String aNumber = stdin.readLineSync() ?? '';
+  String aNumber = randomString;
   double balance = 0;
   return Persons(uName, aNumber, balance);
 }
@@ -72,21 +75,54 @@ Future<void> compareAccount(String? accnum) async {
   var accountDetails = await readAccountInfo();
   for (var account in accountDetails) {
     if (account['accountnumber'] == accnum) {
-      print('Account found $account');
-      print('\n1. Deposti \n2. Withdraw');
-      stdout.write('\nEnter the number of your choise:');
-      String? choise = stdin.readLineSync();
-      if (choise == '1') {
-        double? deposit = getValidAmount('\nEnter amount to deposit: ');
-        account['balance'] += deposit;
-        print('$account');
-        await accountUpdate.update(accountDetails);
-      } else if (choise == '2') {
-        double? withdraw = getValidAmount('Enter amount to withdraw: ');
-        account['balance'] -= withdraw;
-        print('$account');
-        await accountUpdate.update(accountDetails);
+      print('\nAccount found $account');
+      bool continueViewAccount = true;
+      while (continueViewAccount == true) {
+        print('\n1. Deposit \n2. Withdraw \n0. Exit');
+        stdout.write('\nEnter the number of your choise:');
+        String? choise = stdin.readLineSync();
+        if (choise == '1') {
+          depositIntoAccount(account);
+          await accountUpdate.update(accountDetails);
+          continueViewAccount = true;
+        } else if (choise == '2') {
+          withdrawFromAccount(account);
+          await accountUpdate.update(accountDetails);
+          continueViewAccount = true;
+        } else if (choise == '0') {
+          continueViewAccount = false;
+        } else {
+          print('\nPlease enter a valid choise.');
+          continueViewAccount = true;
+        }
       }
+    }
+  }
+}
+
+void depositIntoAccount(Map<String, dynamic> account) {
+  bool depositContinue = true;
+  while (depositContinue == true) {
+    double? deposit = getValidAmount('\nEnter amount to deposit: ');
+    account['balance'] += deposit;
+    print(account);
+    depositContinue = continueTransaction();
+  }
+}
+
+void withdrawFromAccount(Map<String, dynamic> account) {
+  bool withdrawContinue = true;
+  while (withdrawContinue == true) {
+    double? withdraw = getValidAmount('\nEnter amount to withdraw: ');
+    if (withdraw > account['balance']) {
+      print(
+        '\nInsufficient balance. Current account balance: ${account['balance']}',
+      );
+      withdrawContinue = true;
+    } else {
+      account['balance'] -= withdraw;
+      print(account);
+      withdrawContinue = continueTransaction();
     }
   }
 }

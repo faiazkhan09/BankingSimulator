@@ -1,1 +1,1 @@
-[{"name":"faiaz","accountnumber":"001","balance":150.0},{"name":"2cells","accountnumber":"002","balance":0.0},{"name":"fko","accountnumber":"003","balance":0.0}]
+[{"name":"faiaz","accountnumber":"001","balance":100.0},{"name":"2cells","accountnumber":"002","balance":0.0},{"name":"fko","accountnumber":"003","balance":0.0},{"name":"2CR","accountnumber":"004","balance":0.0},{"name":"omiya","accountnumber":"930860","balance":1750.0}]
