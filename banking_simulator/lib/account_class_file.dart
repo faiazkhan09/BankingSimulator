@@ -5,6 +5,7 @@ abstract class PersonRequirements {
   String get name;
   String get accountnumber;
   double get balance;
+  List get transactions;
 }
 
 class Persons extends PersonRequirements {
@@ -14,8 +15,10 @@ class Persons extends PersonRequirements {
   final String accountnumber;
   @override
   final double balance;
+  @override
+  final List transactions;
 
-  Persons(this.name, this.accountnumber, this.balance);
+  Persons(this.name, this.accountnumber, this.balance, this.transactions);
 
   Map<String, dynamic> toJson() => {
     //this is a function called toJson() whcih converts class objects to Map data type

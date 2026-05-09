@@ -43,7 +43,8 @@ Persons createAccount() {
   String uName = stdin.readLineSync() ?? '';
   String aNumber = randomString;
   double balance = 0;
-  return Persons(uName, aNumber, balance);
+  List transactions = [];
+  return Persons(uName, aNumber, balance, transactions);
 }
 
 //Reads text file and returns a List containing Maps of user profiles
@@ -106,6 +107,7 @@ void depositIntoAccount(Map<String, dynamic> account) {
     double? deposit = getValidAmount('\nEnter amount to deposit: ');
     account['balance'] += deposit;
     print(account);
+    account['transactions'].add('Deposited: $deposit');
     depositContinue = continueTransaction();
   }
 }
@@ -122,6 +124,8 @@ void withdrawFromAccount(Map<String, dynamic> account) {
     } else {
       account['balance'] -= withdraw;
       print(account);
+      account['transactions'].add('Deposited: $withdraw');
+
       withdrawContinue = continueTransaction();
     }
   }
