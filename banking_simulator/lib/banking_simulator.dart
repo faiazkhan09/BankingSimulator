@@ -90,6 +90,9 @@ Future<void> compareAccount(String? accnum) async {
           withdrawFromAccount(account);
           await accountUpdate.update(accountDetails);
           continueViewAccount = true;
+        } else if (choise == '3') {
+          print('\n${account['transactions']}');
+          continueViewAccount = true;
         } else if (choise == '0') {
           continueViewAccount = false;
         } else {
@@ -123,7 +126,9 @@ void withdrawFromAccount(Map<String, dynamic> account) {
       withdrawContinue = true;
     } else {
       account['balance'] -= withdraw;
-      print(account);
+      print(
+        'Taka $withdraw has been withdrawn from ${account['accountnumber']}. Remaining balance ${account['balance']}',
+      );
       account['transactions'].add('Deposited: $withdraw');
 
       withdrawContinue = continueTransaction();
