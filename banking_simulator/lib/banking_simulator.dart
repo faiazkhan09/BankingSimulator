@@ -76,7 +76,9 @@ Future<void> compareAccount(String? accnum) async {
   var accountDetails = await readAccountInfo();
   for (var account in accountDetails) {
     if (account['accountnumber'] == accnum) {
-      print('\nAccount found $account');
+      print(
+        '\nAccount found: \n${account['name']}\n${account['accountnumber']}\n${account['balance']}',
+      );
       bool continueViewAccount = true;
       while (continueViewAccount == true) {
         print('\n1. Deposit \n2. Withdraw \n0. Exit');

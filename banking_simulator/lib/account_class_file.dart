@@ -25,6 +25,7 @@ class Persons extends PersonRequirements {
     'name': name,
     'accountnumber': accountnumber,
     'balance': balance,
+    'transactions': transactions,
   };
 }
 
