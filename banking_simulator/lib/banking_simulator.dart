@@ -74,27 +74,38 @@ Future<List<Map<String, dynamic>>> readAccountInfo() async {
 Future<void> compareAccount(String? accnum) async {
   final accountUpdate = AccountUpdate();
   var accountDetails = await readAccountInfo();
-  for (var account in accountDetails) {
-    if (account['accountnumber'] == accnum) {
+  for (var account1 in accountDetails) {
+    if (account1['accountnumber'] == accnum) {
       print(
-        '\nAccount found: \n${account['name']}\n${account['accountnumber']}\n${account['balance']}',
+        '\nAccount found-- \nName: ${account1['name']}\nAccount Number: ${account1['accountnumber']}\nBalance: ${account1['balance']}',
       );
       bool continueViewAccount = true;
       while (continueViewAccount == true) {
-        print('\n1. Deposit \n2. Withdraw \n0. Exit');
+        print(
+          '\n1. Deposit \n2. Withdraw \n3. View transactions \n4. Transfer to another account \n0. Exit',
+        );
         stdout.write('\nEnter the number of your choise:');
         String? choise = stdin.readLineSync();
         if (choise == '1') {
-          depositIntoAccount(account);
+          depositIntoAccount(account1);
           await accountUpdate.update(accountDetails);
           continueViewAccount = true;
         } else if (choise == '2') {
-          withdrawFromAccount(account);
+          withdrawFromAccount(account1);
           await accountUpdate.update(accountDetails);
           continueViewAccount = true;
         } else if (choise == '3') {
-          print('\n${account['transactions']}');
+          print('\n${account1['transactions']}');
           continueViewAccount = true;
+        } else if (choise == '4') {
+          stdout.write('Énter account number: ');
+          String? accnum2 = stdin.readLineSync();
+          for (var account2 in accountDetails) {
+            if (account2['accountnumber'] == accnum2) {
+              transferBalance(account1, account2);
+              await accountUpdate.update(accountDetails);
+            }
+          }
         } else if (choise == '0') {
           continueViewAccount = false;
         } else {
@@ -134,6 +145,32 @@ void withdrawFromAccount(Map<String, dynamic> account) {
       account['transactions'].add('Deposited: $withdraw');
 
       withdrawContinue = continueTransaction();
+    }
+  }
+}
+
+void transferBalance(
+  Map<String, dynamic> account1,
+  Map<String, dynamic> account2,
+) {
+  bool transferContinue = true;
+  while (transferContinue == true) {
+    double? transfer = getValidAmount('\nEnter amount to deposit: ');
+    if (account1['balance'] > transfer) {
+      account1['balance'] -= transfer;
+      account2['balance'] += transfer;
+      account1['transactions'].add(
+        'Transfered $transfer to account: ${account2['accountnumber']}, ${account2['name']}',
+      );
+      account2['transactions'].add(
+        'Recieved $transfer from account: ${account1['accountnumber']}, ${account1['name']}',
+      );
+      transferContinue = continueTransaction();
+    } else {
+      print(
+        '\nInsufficient balance. Current account balance: ${account1['balance']}',
+      );
+      transferContinue = true;
     }
   }
 }

@@ -1,1 +1,1 @@
-[{"name":"faiaz","accountnumber":"554993","balance":750.0,"transactions":["Deposited: 500.0","Deposited: 250.0"]}]
+[{"name":"faiaz","accountnumber":"554993","balance":250.0,"transactions":["Deposited: 500.0","Deposited: 250.0","Transfered 500.0 to account: 225802, fko"]},{"name":"fko","accountnumber":"225802","balance":500.0,"transactions":["Recieved 500.0 from account: 554993, faiaz"]},{"name":"omiya","accountnumber":"605999","balance":0.0,"transactions":[]}]
