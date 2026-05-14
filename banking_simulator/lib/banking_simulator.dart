@@ -39,12 +39,22 @@ Persons createAccount() {
   int min = 100000;
   int randomint = min + Random().nextInt(899999);
   String randomString = randomint.toString();
-  stdout.write('Enter user name: ');
-  String uName = stdin.readLineSync() ?? '';
+  String? uName;
+  String? uPassword;
+  while ((uName == null || uName == '') ||
+      (uPassword == null || uPassword == '')) {
+    stdout.write('Enter user name: ');
+    uName = stdin.readLineSync() ?? '';
+    stdout.write('Enter password: ');
+    uPassword = stdin.readLineSync() ?? '';
+    if (uName == '' || uPassword == '') {
+      print('Error with Username or Password');
+    }
+  }
   String aNumber = randomString;
   double balance = 0;
   List transactions = [];
-  return Persons(uName, aNumber, balance, transactions);
+  return Persons(uName, aNumber, uPassword, balance, transactions);
 }
 
 //Reads text file and returns a List containing Maps of user profiles
@@ -52,7 +62,8 @@ Future<List<Map<String, dynamic>>> readAccountInfo() async {
   final accountInfo = File('banking_simulator/data/accounts.txt');
   try {
     if (await accountInfo.exists()) {
-      String content = await accountInfo.readAsString();
+      String content = await accountInfo
+          .readAsString(); //file readinlg happens here
 
       if (content.trim().isEmpty) {
         return [];
