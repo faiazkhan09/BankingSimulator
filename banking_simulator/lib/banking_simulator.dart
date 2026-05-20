@@ -63,7 +63,7 @@ Future<List<Map<String, dynamic>>> readAccountInfo() async {
   try {
     if (await accountInfo.exists()) {
       String content = await accountInfo
-          .readAsString(); //file readinlg happens here
+          .readAsString(); //file reading happens here
 
       if (content.trim().isEmpty) {
         return [];
@@ -87,41 +87,55 @@ Future<void> compareAccount(String? accnum) async {
   var accountDetails = await readAccountInfo();
   for (var account1 in accountDetails) {
     if (account1['accountnumber'] == accnum) {
-      print(
-        '\nAccount found-- \nName: ${account1['name']}\nAccount Number: ${account1['accountnumber']}\nBalance: ${account1['balance']}',
-      );
-      bool continueViewAccount = true;
-      while (continueViewAccount == true) {
-        print(
-          '\n1. Deposit \n2. Withdraw \n3. View transactions \n4. Transfer to another account \n0. Exit',
-        );
-        stdout.write('\nEnter the number of your choise:');
-        String? choise = stdin.readLineSync();
-        if (choise == '1') {
-          depositIntoAccount(account1);
-          await accountUpdate.update(accountDetails);
-          continueViewAccount = true;
-        } else if (choise == '2') {
-          withdrawFromAccount(account1);
-          await accountUpdate.update(accountDetails);
-          continueViewAccount = true;
-        } else if (choise == '3') {
-          print('\n${account1['transactions']}');
-          continueViewAccount = true;
-        } else if (choise == '4') {
-          stdout.write('Énter account number: ');
-          String? accnum2 = stdin.readLineSync();
-          for (var account2 in accountDetails) {
-            if (account2['accountnumber'] == accnum2) {
-              transferBalance(account1, account2);
+      bool correctPass = false;
+      while (correctPass == false) {
+        stdout.write('Enter password:');
+        String? pass = stdin.readLineSync() ?? ' ';
+        if (account1['password'] == pass) {
+          print(
+            '\nAccount found-- \nName: ${account1['name']}\nAccount Number: ${account1['accountnumber']}\nBalance: ${account1['balance']}',
+          );
+          bool continueViewAccount = true;
+          while (continueViewAccount == true) {
+            print(
+              '\n1. Deposit \n2. Withdraw \n3. View transactions \n4. Transfer to another account \n0. Exit',
+            );
+            stdout.write('\nEnter the number of your choise:');
+            String? choise = stdin.readLineSync();
+            if (choise == '1') {
+              depositIntoAccount(account1);
               await accountUpdate.update(accountDetails);
+              continueViewAccount = true;
+            } else if (choise == '2') {
+              withdrawFromAccount(account1);
+              await accountUpdate.update(accountDetails);
+              continueViewAccount = true;
+            } else if (choise == '3') {
+              print('\n${account1['transactions']}');
+              continueViewAccount = true;
+            } else if (choise == '4') {
+              stdout.write('Enter account number: ');
+              String? accnum2 = stdin.readLineSync();
+              for (var account2 in accountDetails) {
+                if (account2['accountnumber'] == accnum2) {
+                  transferBalance(account1, account2);
+                  await accountUpdate.update(accountDetails);
+                }
+              }
+            } else if (choise == '0') {
+              continueViewAccount = false;
+            } else {
+              print('\nPlease enter a valid choise.');
+              continueViewAccount = true;
             }
           }
-        } else if (choise == '0') {
-          continueViewAccount = false;
+          correctPass = true;
+        } else if (account1['password'] == 'x' || account1['password'] == '0') {
+          correctPass = true; // needs to be fixed
+          break;
         } else {
-          print('\nPlease enter a valid choise.');
-          continueViewAccount = true;
+          print('Incorrect password. Please enter correct passowrd!');
+          correctPass = false;
         }
       }
     }
