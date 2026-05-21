@@ -89,7 +89,7 @@ Future<void> compareAccount(String? accnum) async {
     if (account1['accountnumber'] == accnum) {
       bool correctPass = false;
       while (correctPass == false) {
-        stdout.write('Enter password:');
+        stdout.write('Enter password (press x or 0 to exit):');
         String? pass = stdin.readLineSync() ?? ' ';
         if (account1['password'] == pass) {
           print(
@@ -130,14 +130,17 @@ Future<void> compareAccount(String? accnum) async {
             }
           }
           correctPass = true;
-        } else if (account1['password'] == 'x' || account1['password'] == '0') {
-          correctPass = true; // needs to be fixed
-          break;
+        } else if (pass == 'x' || pass == '0') {
+          correctPass = true;
+          //break;
         } else {
           print('Incorrect password. Please enter correct passowrd!');
           correctPass = false;
         }
       }
+    } else {
+      print('\nAccount not found');
+      break;
     }
   }
 }

@@ -23,7 +23,7 @@ void main() async {
         print('Could not create your account! Please try again');
       }
     } else if (choise == '2') {
-      stdout.write('Enter account number:');
+      stdout.write('\nEnter account number:');
       String? accnum = stdin.readLineSync();
       await compareAccount(accnum);
     } else if (choise == '0') {
